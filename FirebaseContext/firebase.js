@@ -23,9 +23,25 @@ class Firebase {
   
       queryAddUser = (id,data) => this.db.collection("users").doc(id).set(data);
 
+      // one users
+
       queryOneUsers = (id) => this.db.collection("users").doc(id).get();
 
+      // list menu
+      queryMenus = ()=> this.db.collection("menu");
 
+      /************************
+       * @returns list Produit
+       ************************/
+      queryProduits = ()=> this.db.collection("produit");
+
+      /**
+       * 
+       * @param {menu} id 
+       * @returns 
+       */
+      queryProduitsMenu = (id)=> this.db.collection("produit")
+      .where("idMenu", "==", id)
     //END QUERY
 
 

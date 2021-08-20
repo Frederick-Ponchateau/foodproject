@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {useSelector,useDispatch} from 'react-redux';
 import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from '../../assets/color';
 import {afficheProduits} from '../../Redux/Actions/produit'
 import { View } from "react-native";
+import { FirebaseContext } from '../../FirebaseContext';
 
 
 
@@ -18,18 +19,33 @@ const menu = () => {
   const [selectedId, setSelectedId] = useState(null);
   const {menu,produit} = useSelector(state => state)
   const dispatch = useDispatch()
+  const {queryProduitsMenu} = useContext(FirebaseContext)
   const List= menu.lstMenu;
-  const ListProduit = produit.lstProduit;
-  
-
   const renderItem = ({ item }) => {
     const backgroundColor = item.id === selectedId ? colors.Orange1 : colors.Orange2;
     const color = item.id === selectedId ? 'white' : 'black';
+    /******************************************
+     * 
+     * @param {selection id menu } id
+     * Envoi l'information dans le reduceur 
+     * pour l'affichage des produits selon le menu 
+     ******************************************/
     const selectMenu = (id) =>{
       setSelectedId(id)
-      dispatch(afficheProduits(id))
+      const tryProduct = queryProduitsMenu(id).get()
+      .then(querySnapshot => {  console.log('Total menu: ', querySnapshot.size);
+      let tabTps= [];
+      querySnapshot.forEach(documentSnapshot => {
+        if(documentSnapshot.exists){
+          tabTps=[...tabTps,{id:documentSnapshot.id,...documentSnapshot.data()}];
+        }
+      });
+      if(tabTps.length>0){
+        //console.log("tabTps",tabTps);
+        dispatch(afficheProduits(tabTps))
+      }
+    });
     }
-
     return (
     
       
@@ -49,7 +65,7 @@ const menu = () => {
       
       <FlatList
       horizontal={true}
-        data={List}
+        data={menu.lstMenu}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         extraData={selectedId}

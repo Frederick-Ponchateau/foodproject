@@ -1,6 +1,6 @@
-import {AFF_MENU } from "../Actions/types";
+import {AFF_MENU,ADD_MENU } from "../Actions/types";
 
-const initStateExemple = {lstMenu:[{id:0,nom:"Tout"},{id:1,nom:"Pizza"},{id:2,nom:"Burger"},{id:3,nom:"Salade"},{id:4,nom:"Tacos"}]}
+const initStateExemple = {lstMenu:[]}
 
 const menu = (state = initStateExemple, action) => {
    // console.log(action)
@@ -10,6 +10,12 @@ const menu = (state = initStateExemple, action) => {
         
         case AFF_MENU:
             return action.payload ;
+            break;
+        case ADD_MENU:
+          
+                console.log("action.payload: ",{...state,lstMenu:{...action.payload}})
+            return {...state,lstMenu:[...action.payload]};
+           
             break;
         default:
             return state

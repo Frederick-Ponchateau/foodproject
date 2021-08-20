@@ -22,7 +22,7 @@ const index = ({navigation}) => {
             <View style={Styles.content} >
                 <Text style={Styles.txtTitle}>BONJOUR {nom}</Text>
                 <Text style={Styles.txtSubTitle}>vous mangez quoi aujourd'hui ?</Text>
-                <Menu />
+               <Menu />
             </View>
             <View style={Styles.VueListe}>
                 <Produits/>
